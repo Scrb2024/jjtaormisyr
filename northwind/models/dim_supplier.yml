@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: dim_supplier
+    description: >
+      Dimension table for suppliers sourced from the northwind.suppliers table.
+      Includes contact, location, and communication details for each supplier.
+
+    columns:
+      - name: supplierkey
+        description: Surrogate key for the supplier dimension.
+        tests:
+          - not_null
+          - unique
+
+      - name: supplierid
+        description: Primary key of the source systems (business key).
+        tests:
+          - not_null
+
+      - name: companyname
+        description: The name of the supplier's company.
+
+      - name: contactname
+        description: Supplier contact name.
+
+      - name: contacttitle
+        description: Supplier contact title.
+
+      - name: supplieraddress
+        description: Supplier address.
+
+      - name: suppliercity
+        description: Supplier city.
+
+      - name: supplierregion
+        description: Supplier region or state.
+
+      - name: supplierpostalcode
+        description: Supplier postal code.
+
+      - name: suppliercountry
+        description: Supplier country.
+
+      - name: supplierphone
+        description: Supplier phone.
+
+      - name: supplierfax
+        description: Supplier fax.
+
+      - name: supplierhomepage
+        description: Supplier homepage.

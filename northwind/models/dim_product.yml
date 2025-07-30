@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: dim_product
+    description: >
+      Dimension table for products sourced from northwind.products and
+      enriched with category and supplier information.
+
+    columns:
+      - name: productkey
+        description: Surrogate key for the product dimension.
+        tests:
+          - not_null
+          - unique
+
+      - name: productid
+        description: Primary key of the source systems (business key).
+        tests:
+          - not_null
+          - unique
+
+      - name: productname
+        description: The name of the product.
+
+      - name: supplierkey
+        description: Foreign key to dim_supplier for Snowflake.
+
+      - name: categoryname
+        description: Product category name.
+
+      - name: categorydescription
+        description: Product category description.

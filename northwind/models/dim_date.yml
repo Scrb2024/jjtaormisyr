@@ -1,3 +1,5 @@
+version: 2
+
 models:
   - name: dim_date
     description: Conformed Date Dimension. One row per day of the year.
