@@ -1,0 +1,7 @@
+version: 2
+
+models:
+  - name: obt_fact_sales
+    description: >
+      The sales fact table combined with all its dimension lookups into one denormalized wide table.
+      Granularity is one row per product per order. Useful for downstream analytics and drill-through reporting.

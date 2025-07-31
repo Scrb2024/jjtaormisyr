@@ -3,7 +3,7 @@ with stg_orders as (
         orderid,
         {{ dbt_utils.generate_surrogate_key(['customerid']) }} as customerkey,
         {{ dbt_utils.generate_surrogate_key(['employeeid']) }} as employeekey,
-        to_number(to_char(orderdate, 'YYYYMMDD')) as orderdatekey
+        replace(to_date(orderdate)::varchar, '-', '')::int as orderdatekey
     from {{ source('northwind', 'Orders') }}
 ),
 
@@ -11,22 +11,21 @@ stg_order_details as (
     select
         orderid,
         productid,
-        quantity,
-        unitprice,
-        discount,
-        quantity * unitprice as extendedpriceamount,
-        quantity * unitprice * discount as discountamount,
-        (quantity * unitprice) - (quantity * unitprice * discount) as soldamount
+        sum(quantity) as quantity,
+        sum(quantity * unitprice) as extendedpriceamount,
+        sum(quantity * unitprice * discount) as discountamount,
+        sum((quantity * unitprice) - (quantity * unitprice * discount)) as soldamount
     from {{ source('northwind', 'Order_Details') }}
+    group by orderid, productid
 ),
 
-fact_sales as (
+final_sales as (
     select
         od.orderid,
         o.customerkey,
         o.employeekey,
         o.orderdatekey,
-        {{ dbt_utils.generate_surrogate_key(['od.productid']) }} as productkey,
+        {{ dbt_utils.generate_surrogate_key(['productid']) }} as productkey,
         od.quantity,
         od.extendedpriceamount,
         od.discountamount,
@@ -35,4 +34,4 @@ fact_sales as (
     join stg_orders o on o.orderid = od.orderid
 )
 
-select * from fact_sales;
+select * from final_sales
