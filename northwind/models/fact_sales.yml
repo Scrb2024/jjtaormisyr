@@ -1,0 +1,40 @@
+version: 2
+
+models:
+  - name: fact_sales
+    description: Product-level fact table. One row per product per order, used for detailed sales analysis and drill-through.
+    columns:
+      - name: orderid
+        description: Source key used for drill-through
+        tests:
+          - not_null
+
+      - name: productkey
+        description: Dimension key for dim_product
+        tests:
+          - not_null
+
+      - name: customerkey
+        description: Dimension key for dim_customer
+
+      - name: employeekey
+        description: Dimension key for dim_employee
+
+      - name: orderdatekey
+        description: Dimension key for dim_date (order date)
+
+      - name: quantity
+        description: Additive fact for quantity of the product on the order
+
+      - name: extendedpriceamount
+        description: Additive fact for quantity * unit price
+
+      - name: discountamount
+        description: Additive fact for extended price * discount
+
+      - name: soldamount
+        description: Additive fact for extended price - discount amount
+
+    tests:
+      - unique:
+          columns: [orderid, productkey]
